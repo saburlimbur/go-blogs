@@ -19,7 +19,7 @@ model User {
   email       String      @unique
   password    String
 
-  posts       Post[]
+  posts       Post[]      @relation("users")
 }
 
 model Post {
@@ -29,7 +29,7 @@ model Post {
   createdAt   DateTime    @default(now())
   authorId    Int
 
-  author      User        @relation(fields: [authorId], references: [id]) 
+  author      User        @relation("users", fields: [authorId], references: [id], onDelete: Cascade) 
   tags        Tag[]       @relation("tags") // ("uniq")  
 }
 

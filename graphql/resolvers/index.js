@@ -4,9 +4,15 @@ const prisma = new PrismaClient();
 
 export const resolvers = {
   Query: {
-    users: async () => {
+    users: async (_, { id }) => {
+      if (id) {
+        return prisma.user.findUnique({
+          where: { id: parseInt(id) }, // uniq by id
+          include: { posts: true }, // include: sudah termasuk relasi
+        });
+      }
       return prisma.user.findMany({
-        include: { posts: true }, // include: sudah termasuk relasi
+        include: { posts: true }, 
       });
     },
     posts: async () => {
@@ -18,6 +24,23 @@ export const resolvers = {
       return prisma.tag.findMany({
         include: { posts: true },
       });
+    },
+  },
+
+  Mutation: {
+    deleteUser: async (_, { id }) => {
+      await prisma.post.deleteMany({ // delete post dari authorId
+        where: { authorId: parseInt(id) },
+      });
+
+      const deletedUser = await prisma.user.delete({
+        where: { id: parseInt(id) },
+      });
+
+      return {
+        message: `Success Delete User ID ${id}`,
+        user: deletedUser,
+      };
     },
   },
 };

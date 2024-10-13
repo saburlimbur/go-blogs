@@ -23,8 +23,12 @@ type Tag {
 
 type Query {
     # [] isi field query yang ngebalikin tipe yang sudah didefinisikan pada schema
-    users: [User!]!    
-    posts: [Post!]!    
-    tags: [Tag!]!          
+    users(id: Int): User # by id
+    posts: [Post!]!
+    tags: [Tag!]!
+}
+
+type Mutation {
+    deleteUser(id: ID!): User # agar bisa delete (mutasi) by id
 }
 `;

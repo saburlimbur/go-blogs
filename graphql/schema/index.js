@@ -23,7 +23,7 @@ type Tag {
 
 type Query {
     # [] isi field query yang ngebalikin tipe yang sudah didefinisikan pada schema
-    users(id: Int): User # by id
+    users(id: Int): [User!]! # by id
     posts: [Post!]!
     tags: [Tag!]!
 }

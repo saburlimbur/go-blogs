@@ -6,15 +6,16 @@ export const resolvers = {
   Query: {
     users: async (_, { id }) => {
       if (id) {
-        return prisma.user.findUnique({
+        return await prisma.user.findUnique({
           where: { id: parseInt(id) }, // uniq by id
           include: { posts: true }, // include: sudah termasuk relasi
         });
       }
       return prisma.user.findMany({
-        include: { posts: true }, 
+        include: { posts: true },
       });
     },
+
     posts: async () => {
       return prisma.post.findMany({
         include: { tags: true },
@@ -29,7 +30,8 @@ export const resolvers = {
 
   Mutation: {
     deleteUser: async (_, { id }) => {
-      await prisma.post.deleteMany({ // delete post dari authorId
+      await prisma.post.deleteMany({
+        // delete post dari authorId
         where: { authorId: parseInt(id) },
       });
 

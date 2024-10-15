@@ -6,11 +6,17 @@ export const resolvers = {
   Query: {
     users: async (_, { id }) => {
       if (id) {
-        return await prisma.user.findUnique({
+        const users = await prisma.user.findUnique({
           where: { id: parseInt(id) }, // uniq by id
           include: { posts: true }, // include: sudah termasuk relasi
         });
+
+        if (!users) {
+          throw new Error(`User ID ${id} not founds`);
+        }
+        return [users];
       }
+
       return prisma.user.findMany({
         include: { posts: true },
       });
